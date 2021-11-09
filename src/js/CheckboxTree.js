@@ -281,12 +281,41 @@ class CheckboxTree extends React.Component {
         return (
             <DragDropContext
                 onDragEnd={(params) => {
-                    console.log(nodes);
-                    console.log('params', params)
+                    if (!params.destination)
+                        return
+
+                    let parentNodeValue = params.destination.droppableId
+                    let childSrcIndex = params.source.index
+                    let childDstIndex = params.destination.index
+                    // console.log(`NODE ${parentNodeValue} move child from ${childSrcIndex} to ${childDstIndex}`)
+
+                    let rootNode = {
+                        value: '/',
+                        children: JSON.parse(JSON.stringify(this.props.nodes))
+                    }
+                    // find parent node
+                    let traverseNodes = (root, nodeValue) => {
+                        if (root.children)
+                            for (let node of root.children) {
+                                if (node.value === nodeValue)
+                                    return node
+                                let result = traverseNodes(node, nodeValue)
+                                if (result !== undefined) return result
+                            }
+                        return undefined
+                    }
+                    let parentNode = parentNodeValue == '/' ? rootNode : traverseNodes(rootNode, parentNodeValue)
+                    // swap values
+                    let _tmp = parentNode.children[childSrcIndex]
+                    parentNode.children[childSrcIndex] = parentNode.children[childDstIndex]
+                    parentNode.children[childDstIndex] = _tmp
+
+                    // console.log(rootNode)
+                    let newPropsNodes = rootNode.children
                 }}
             >
                 <Droppable
-                    droppableId={(Math.random() + 1).toString(36).substring(7)}
+                    droppableId={(parent.value ?? '/')}
                 >
                     {
                         (provider) => {
