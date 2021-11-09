@@ -13,6 +13,7 @@ import iconsShape from './shapes/iconsShape';
 import languageShape from './shapes/languageShape';
 import listShape from './shapes/listShape';
 import nodeShape from './shapes/nodeShape';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 class CheckboxTree extends React.Component {
     static propTypes = {
@@ -79,9 +80,9 @@ class CheckboxTree extends React.Component {
         showExpandAll: false,
         showNodeIcon: true,
         showNodeTitle: false,
-        onCheck: () => {},
+        onCheck: () => { },
         onClick: null,
-        onExpand: () => {},
+        onExpand: () => { },
     };
 
     constructor(props) {
@@ -226,7 +227,7 @@ class CheckboxTree extends React.Component {
         const { id, model } = this.state;
         const { icons: defaultIcons } = CheckboxTree.defaultProps;
 
-        const treeNodes = nodes.map((node) => {
+        const treeNodes = nodes.map((node, index) => {
             const key = node.value;
             const flatNode = model.getNode(node.value);
             const children = flatNode.isParent ? this.renderTreeNodes(node.children, node) : null;
@@ -270,6 +271,7 @@ class CheckboxTree extends React.Component {
                     onCheck={this.onCheck}
                     onClick={onClick && this.onNodeClick}
                     onExpand={this.onExpand}
+                    id={index}
                 >
                     {children}
                 </TreeNode>
@@ -277,9 +279,27 @@ class CheckboxTree extends React.Component {
         });
 
         return (
-            <ol>
-                {treeNodes}
-            </ol>
+            <DragDropContext
+                onDragEnd={(params) => {
+                    console.log(nodes);
+                    console.log('params', params)
+                }}
+            >
+                <Droppable
+                    droppableId={(Math.random() + 1).toString(36).substring(7)}
+                >
+                    {
+                        (provider) => {
+                            return (
+                                <ol {...provider.droppableProps} ref={provider.innerRef}>
+                                    {treeNodes}
+                                    {provider.placeholder}
+                                </ol>
+                            );
+                        }
+                    }
+                </Droppable>
+            </DragDropContext>
         );
     }
 
