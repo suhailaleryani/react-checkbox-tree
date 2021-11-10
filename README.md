@@ -1,4 +1,4 @@
-# react-checkbox-tree
+# react-checkbox-tree-reorderable
 
 [![npm](https://img.shields.io/npm/v/react-checkbox-tree.svg?style=flat-square)](https://www.npmjs.com/package/react-checkbox-tree)
 [![Build Status](https://img.shields.io/travis/com/jakezatecky/react-checkbox-tree?style=flat-square)](https://app.travis-ci.com/github/jakezatecky/react-checkbox-tree)
@@ -6,7 +6,9 @@
 
 
 > Forked from [React Checkbox Tree](https://github.com/jakezatecky/react-checkbox-tree) and added functionality to darg and drop items inside the list to reorder them, to start using this feature set the props orderable and onOrderChange.
+
 ![Demo](draganddrop.gif)
+
 
 
 
