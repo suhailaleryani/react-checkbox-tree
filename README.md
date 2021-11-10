@@ -4,6 +4,12 @@
 [![Build Status](https://img.shields.io/travis/com/jakezatecky/react-checkbox-tree?style=flat-square)](https://app.travis-ci.com/github/jakezatecky/react-checkbox-tree)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/jakezatecky/react-checkbox-tree/master/LICENSE.txt)
 
+
+> Forked from [React Checkbox Tree](https://github.com/jakezatecky/react-checkbox-tree) and added functionality to darg and drop items inside the list to reorder them, to start using this feature set the props orderable and onOrderChange.
+![Demo](draganddrop.gif)
+
+
+
 > A simple and elegant checkbox tree for React.
 
 ![Demo](demo.gif)
@@ -180,6 +186,8 @@ Returns:
 | `onCheck`            | function | onCheck handler: `function(checked, targetNode) {}`                                                                    | `() => {}`  |
 | `onClick`            | function | onClick handler: `function(targetNode) {}`. If set, `onClick` will be called when a node's label has been clicked.     | `() => {}`  |
 | `onExpand`           | function | onExpand handler: `function(expanded, targetNode) {}`                                                                  | `() => {}`  |
+| `orderable`   | bool     | to disable drag and drop functionality         | `true`      |
+| `onOrderChange`           | function | onOrderChange handler: `function(nodeOrdered) {}`                                                                  | `() => {}`  |
 
 #### `onCheck` and `onExpand`
 
