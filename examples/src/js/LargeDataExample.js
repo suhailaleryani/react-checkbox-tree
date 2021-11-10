@@ -30,6 +30,7 @@ class LargeDataExample extends React.Component {
     state = {
         checked: [],
         expanded: [],
+        nodes: nodes,
     };
 
     constructor(props) {
@@ -47,8 +48,14 @@ class LargeDataExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
 
         return (
             <CheckboxTree
@@ -58,6 +65,8 @@ class LargeDataExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
+                orderable={true}
+                onOrderChange={this.onOrderChange}
             />
         );
     }

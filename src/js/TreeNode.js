@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
 import Button from './Button';
 import NativeCheckbox from './NativeCheckbox';
@@ -35,6 +36,9 @@ class TreeNode extends React.PureComponent {
         showCheckbox: PropTypes.bool,
         title: PropTypes.string,
         onClick: PropTypes.func,
+        draggableId: PropTypes.string.isRequired,
+        draggableIndex: PropTypes.number.isRequired,
+        isDragDisabled: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -44,7 +48,8 @@ class TreeNode extends React.PureComponent {
         icon: null,
         showCheckbox: true,
         title: null,
-        onClick: () => {},
+        onClick: () => { },
+        isDragDisabled: false,
     };
 
     constructor(props) {
@@ -234,7 +239,7 @@ class TreeNode extends React.PureComponent {
                     id={inputId}
                     indeterminate={checked === 2}
                     onClick={this.onCheck}
-                    onChange={() => {}}
+                    onChange={() => { }}
                 />
                 <span
                     aria-checked={checked === 1}
@@ -303,6 +308,9 @@ class TreeNode extends React.PureComponent {
             disabled,
             expanded,
             isLeaf,
+            draggableIndex,
+            draggableId,
+            isDragDisabled,
         } = this.props;
         const nodeClass = classNames({
             'rct-node': true,
@@ -314,13 +322,33 @@ class TreeNode extends React.PureComponent {
         }, className);
 
         return (
-            <li className={nodeClass}>
-                <span className="rct-text">
-                    {this.renderCollapseButton()}
-                    {this.renderLabel()}
-                </span>
-                {this.renderChildren()}
-            </li>
+            <Draggable
+                draggableId={draggableId}
+                index={draggableIndex}
+                isDragDisabled={isDragDisabled}
+            >
+                {(provider) => {
+                    return (
+                        <li
+                            className={nodeClass}
+                            {...provider.draggableProps}
+                            ref={provider.innerRef}
+                            style={{
+                                ...provider.draggableProps.style,
+                            }}
+                        >
+                            <span
+                                className="rct-text"
+                                {...provider.dragHandleProps}
+                            >
+                                {this.renderCollapseButton()}
+                                {this.renderLabel()}
+                            </span>
+                            {this.renderChildren()}
+                        </li>
+                    )
+                }}
+            </Draggable>
         );
     }
 }

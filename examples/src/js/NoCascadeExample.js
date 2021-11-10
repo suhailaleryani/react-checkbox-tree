@@ -93,6 +93,7 @@ class NoCascadeExample extends React.Component {
             '/app',
             '/app/Http',
         ],
+        nodes: nodes,
     };
 
     constructor(props) {
@@ -110,8 +111,14 @@ class NoCascadeExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
 
         return (
             <CheckboxTree
@@ -122,6 +129,8 @@ class NoCascadeExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
+                orderable={true}
+                onOrderChange={this.onOrderChange}
             />
         );
     }

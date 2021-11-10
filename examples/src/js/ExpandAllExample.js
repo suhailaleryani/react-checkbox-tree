@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: '/app',
         label: 'app',
@@ -92,6 +92,7 @@ class ExpandAllExample extends React.Component {
         expanded: [
             '/app',
         ],
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -109,8 +110,14 @@ class ExpandAllExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
 
         return (
             <div className="expand-all-container">
@@ -122,6 +129,8 @@ class ExpandAllExample extends React.Component {
                     showExpandAll
                     onCheck={this.onCheck}
                     onExpand={this.onExpand}
+                    orderable={true}
+                    onOrderChange={this.onOrderChange}
                 />
             </div>
         );
