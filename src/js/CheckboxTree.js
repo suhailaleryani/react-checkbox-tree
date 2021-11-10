@@ -306,9 +306,11 @@ class CheckboxTree extends React.Component {
                     }
                     let parentNode = parentNodeValue == '/' ? rootNode : traverseNodes(rootNode, parentNodeValue)
                     // swap values
-                    let _tmp = parentNode.children[childSrcIndex]
-                    parentNode.children[childSrcIndex] = parentNode.children[childDstIndex]
-                    parentNode.children[childDstIndex] = _tmp
+                    let element = parentNode.children[childSrcIndex]
+                    let arr = parentNode.children
+                    arr = arr.slice(0, childSrcIndex).concat(arr.slice(childSrcIndex + 1))
+                    arr = arr.slice(0, childDstIndex).concat([element,]).concat(arr.slice(childDstIndex))
+                    parentNode.children = arr
 
                     // console.log(rootNode)
                     let newPropsNodes = rootNode.children
