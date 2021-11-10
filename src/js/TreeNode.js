@@ -36,7 +36,8 @@ class TreeNode extends React.PureComponent {
         showCheckbox: PropTypes.bool,
         title: PropTypes.string,
         onClick: PropTypes.func,
-        id: PropTypes.number.isRequired,
+        draggableId: PropTypes.string.isRequired,
+        draggableIndex: PropTypes.number.isRequired,
         isDragDisabled: PropTypes.bool.isRequired,
     };
 
@@ -307,7 +308,8 @@ class TreeNode extends React.PureComponent {
             disabled,
             expanded,
             isLeaf,
-            id,
+            draggableIndex,
+            draggableId,
             isDragDisabled,
         } = this.props;
         const nodeClass = classNames({
@@ -321,8 +323,8 @@ class TreeNode extends React.PureComponent {
 
         return (
             <Draggable
-                draggableId={`${id}`}
-                index={id}
+                draggableId={draggableId}
+                index={draggableIndex}
                 isDragDisabled={isDragDisabled}
             >
                 {(provider) => {
