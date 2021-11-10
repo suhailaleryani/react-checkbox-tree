@@ -98,6 +98,7 @@ class HiddenCheckboxesExample extends React.Component {
             'classical-era',
             'medieval-era',
         ],
+        nodes: nodes,
     };
 
     constructor(props) {
@@ -115,8 +116,14 @@ class HiddenCheckboxesExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
 
         return (
             <CheckboxTree
@@ -127,6 +134,8 @@ class HiddenCheckboxesExample extends React.Component {
                 onlyLeafCheckboxes
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
+                orderable={true}
+                onOrderChange={this.onOrderChange}
             />
         );
     }

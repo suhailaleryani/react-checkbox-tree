@@ -92,6 +92,7 @@ class DisabledExample extends React.Component {
         expanded: [
             '/app',
         ],
+        nodes: nodes,
     };
 
     constructor(props) {
@@ -109,8 +110,14 @@ class DisabledExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
 
         return (
             <CheckboxTree
@@ -121,6 +128,8 @@ class DisabledExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
+                orderable={true}
+                onOrderChange={this.onOrderChange}
             />
         );
     }

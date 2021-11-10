@@ -82,6 +82,7 @@ const nodes = [
 
 class BasicExample extends React.Component {
     state = {
+        nodes: nodes,
         checked: [
             '/app/Http/Controllers/WelcomeController.js',
             '/app/Http/routes.js',
@@ -109,8 +110,16 @@ class BasicExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded } = this.state;
+        const { checked, expanded, nodes } = this.state;
+        const onOrderChange = this.onOrderChange;
+        const key = Math.random();
 
         return (
             <CheckboxTree
@@ -120,6 +129,8 @@ class BasicExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
+                orderable={true}
+                onOrderChange={onOrderChange}
             />
         );
     }

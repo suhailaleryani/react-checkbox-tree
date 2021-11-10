@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: '/app',
         label: 'app',
@@ -93,8 +93,8 @@ class FilterExample extends React.Component {
             '/app',
         ],
         filterText: '',
-        nodesFiltered: nodes,
-        nodes,
+        nodesFiltered: nodesData,
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -152,6 +152,12 @@ class FilterExample extends React.Component {
         return filtered;
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodesFiltered: orderedNodes
+        });
+    }
+
     render() {
         const {
             checked,
@@ -176,6 +182,8 @@ class FilterExample extends React.Component {
                     nodes={nodesFiltered}
                     onCheck={this.onCheck}
                     onExpand={this.onExpand}
+                    orderable={true}
+                    onOrderChange={this.onOrderChange}
                 />
             </div>
         );

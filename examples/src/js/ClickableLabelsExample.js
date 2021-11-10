@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: '/app',
         label: 'app',
@@ -94,6 +94,7 @@ class ClickExample extends React.Component {
             '/app',
         ],
         clicked: {},
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -116,8 +117,14 @@ class ClickExample extends React.Component {
         this.setState({ expanded });
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodes: orderedNodes,
+        });
+    }
+
     render() {
-        const { checked, expanded, clicked } = this.state;
+        const { checked, expanded, clicked, nodes } = this.state;
         const notClickedText = '(none)';
 
         return (
@@ -131,6 +138,8 @@ class ClickExample extends React.Component {
                     onCheck={this.onCheck}
                     onClick={this.onClick}
                     onExpand={this.onExpand}
+                    orderable={true}
+                    onOrderChange={this.onOrderChange}
                 />
                 <div className="clickable-labels-info">
                     <strong>Clicked Node</strong>: {clicked.value || notClickedText}
