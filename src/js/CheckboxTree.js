@@ -14,6 +14,7 @@ import languageShape from './shapes/languageShape';
 import listShape from './shapes/listShape';
 import nodeShape from './shapes/nodeShape';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { reorder } from './utils';
 
 class CheckboxTree extends React.Component {
     static propTypes = {
@@ -42,6 +43,8 @@ class CheckboxTree extends React.Component {
         onCheck: PropTypes.func,
         onClick: PropTypes.func,
         onExpand: PropTypes.func,
+        orderable: PropTypes.bool.isRequired,
+        onOrderChange: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -83,6 +86,9 @@ class CheckboxTree extends React.Component {
         onCheck: () => { },
         onClick: null,
         onExpand: () => { },
+        // to handle default props for drag and drop
+        orderable: true,
+        onOrderChange: () => { },
     };
 
     constructor(props) {
@@ -211,6 +217,46 @@ class CheckboxTree extends React.Component {
         );
     }
 
+    onDragEnd = (params) => {
+        const {
+            orderable,
+            nodes,
+            onOrderChange,
+        } = this.props;
+
+        if (orderable) {
+            if (!params.destination)
+                return
+
+            let parentNodeValue = params.destination.droppableId
+            let childSrcIndex = params.source.index
+            let childDstIndex = params.destination.index
+
+            let rootNode = {
+                value: '/',
+                children: JSON.parse(JSON.stringify(nodes))
+            }
+            // find parent node
+            let traverseNodes = (root, nodeValue) => {
+                if (root.children)
+                    for (let node of root.children) {
+                        if (node.value === nodeValue)
+                            return node
+                        let result = traverseNodes(node, nodeValue)
+                        if (result !== undefined) return result
+                    }
+                return undefined
+            }
+            let parentNode = parentNodeValue == '/' ? rootNode : traverseNodes(rootNode, parentNodeValue)
+            // swap values
+            parentNode.children = reorder(parentNode.children, childSrcIndex, childDstIndex)
+            let newPropsNodes = rootNode.children;
+            if (onOrderChange) {
+                onOrderChange(newPropsNodes)
+            }
+        }
+    }
+
     renderTreeNodes(nodes, parent = {}) {
         const {
             expandDisabled,
@@ -223,6 +269,7 @@ class CheckboxTree extends React.Component {
             optimisticToggle,
             showNodeTitle,
             showNodeIcon,
+            orderable,
         } = this.props;
         const { id, model } = this.state;
         const { icons: defaultIcons } = CheckboxTree.defaultProps;
@@ -272,6 +319,7 @@ class CheckboxTree extends React.Component {
                     onClick={onClick && this.onNodeClick}
                     onExpand={this.onExpand}
                     id={index}
+                    isDragDisabled={!orderable}
                 >
                     {children}
                 </TreeNode>
@@ -280,39 +328,7 @@ class CheckboxTree extends React.Component {
 
         return (
             <DragDropContext
-                onDragEnd={(params) => {
-                    if (!params.destination)
-                        return
-
-                    let parentNodeValue = params.destination.droppableId
-                    let childSrcIndex = params.source.index
-                    let childDstIndex = params.destination.index
-                    // console.log(`NODE ${parentNodeValue} move child from ${childSrcIndex} to ${childDstIndex}`)
-
-                    let rootNode = {
-                        value: '/',
-                        children: JSON.parse(JSON.stringify(this.props.nodes))
-                    }
-                    // find parent node
-                    let traverseNodes = (root, nodeValue) => {
-                        if (root.children)
-                            for (let node of root.children) {
-                                if (node.value === nodeValue)
-                                    return node
-                                let result = traverseNodes(node, nodeValue)
-                                if (result !== undefined) return result
-                            }
-                        return undefined
-                    }
-                    let parentNode = parentNodeValue == '/' ? rootNode : traverseNodes(rootNode, parentNodeValue)
-                    // swap values
-                    let _tmp = parentNode.children[childSrcIndex]
-                    parentNode.children[childSrcIndex] = parentNode.children[childDstIndex]
-                    parentNode.children[childDstIndex] = _tmp
-
-                    // console.log(rootNode)
-                    let newPropsNodes = rootNode.children
-                }}
+                onDragEnd={this.onDragEnd}
             >
                 <Droppable
                     droppableId={(parent.value ?? '/')}

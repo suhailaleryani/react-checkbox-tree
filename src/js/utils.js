@@ -23,5 +23,20 @@ function expandNodesToLevel(nodes, targetLevel, currentLevel = 0) {
     return expanded;
 }
 
+/**
+ *
+ * @param {Array} list
+ * @param {number} startIndex
+ * @param {number} endIndex
+ *
+ * @returns {Array}
+ * */
+function reorder(list, startIndex, endIndex) {
+    const results = Array.from(list);
+    const [removed] = results.splice(startIndex, 1);
+    results.splice(endIndex, 0, removed);
+    return results;
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export { expandNodesToLevel };
+export { expandNodesToLevel, reorder };

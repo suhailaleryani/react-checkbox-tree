@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -37,6 +37,7 @@ class TreeNode extends React.PureComponent {
         title: PropTypes.string,
         onClick: PropTypes.func,
         id: PropTypes.number.isRequired,
+        isDragDisabled: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -47,6 +48,7 @@ class TreeNode extends React.PureComponent {
         showCheckbox: true,
         title: null,
         onClick: () => { },
+        isDragDisabled: false,
     };
 
     constructor(props) {
@@ -306,6 +308,7 @@ class TreeNode extends React.PureComponent {
             expanded,
             isLeaf,
             id,
+            isDragDisabled,
         } = this.props;
         const nodeClass = classNames({
             'rct-node': true,
@@ -320,6 +323,7 @@ class TreeNode extends React.PureComponent {
             <Draggable
                 draggableId={`${id}`}
                 index={id}
+                isDragDisabled={isDragDisabled}
             >
                 {(provider) => {
                     return (
