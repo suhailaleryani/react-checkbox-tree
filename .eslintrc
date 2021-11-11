@@ -17,6 +17,7 @@
   },
   "rules": {
     "react/destructuring-assignment": "off",
-    "react/jsx-sort-props": "off"
+    "react/jsx-sort-props": "off",
+    "linebreak-style": 0
   }
 }
