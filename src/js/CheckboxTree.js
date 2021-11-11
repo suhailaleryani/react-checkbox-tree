@@ -4,16 +4,15 @@ import memoize from 'lodash/memoize';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import React from 'react';
-
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Button from './Button';
 import constants from './constants';
 import NodeModel from './NodeModel';
-import TreeNode from './TreeNode';
 import iconsShape from './shapes/iconsShape';
 import languageShape from './shapes/languageShape';
 import listShape from './shapes/listShape';
 import nodeShape from './shapes/nodeShape';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import TreeNode from './TreeNode';
 import { reorder } from './utils';
 
 class CheckboxTree extends React.Component {
@@ -37,14 +36,14 @@ class CheckboxTree extends React.Component {
         noCascade: PropTypes.bool,
         onlyLeafCheckboxes: PropTypes.bool,
         optimisticToggle: PropTypes.bool,
+        orderable: PropTypes.bool,
         showExpandAll: PropTypes.bool,
         showNodeIcon: PropTypes.bool,
         showNodeTitle: PropTypes.bool,
         onCheck: PropTypes.func,
         onClick: PropTypes.func,
         onExpand: PropTypes.func,
-        orderable: PropTypes.bool.isRequired,
-        onOrderChange: PropTypes.func.isRequired,
+        onOrderChange: PropTypes.func,
     };
 
     static defaultProps = {
@@ -177,6 +176,53 @@ class CheckboxTree extends React.Component {
         this.expandAllNodes(false);
     }
 
+    onDragEnd = (params) => {
+        const {
+            orderable,
+            nodes,
+            onOrderChange,
+        } = this.props;
+
+        if (orderable) {
+            if (!params.destination) {
+                return;
+            }
+
+            const parentNodeValue = params.destination.droppableId;
+            const childSrcIndex = params.source.index;
+            const childDstIndex = params.destination.index;
+
+            const rootNode = {
+                value: '/',
+                children: JSON.parse(JSON.stringify(nodes)),
+            };
+            // find parent node
+            const traverseNodes = (root, nodeValue) => {
+                let result;
+                if (root.children) {
+                    root.children.forEach((node) => {
+                        if (!result) {
+                            if (node.value === nodeValue) {
+                                result = node;
+                            } else {
+                                result = traverseNodes(node, nodeValue);
+                            }
+                        }
+                    });
+                }
+                return result;
+            };
+
+            const parentNode = parentNodeValue === '/' ? rootNode : traverseNodes(rootNode, parentNodeValue);
+            // swap values
+            parentNode.children = reorder(parentNode.children, childSrcIndex, childDstIndex);
+            const newPropsNodes = rootNode.children;
+            if (onOrderChange) {
+                onOrderChange(newPropsNodes);
+            }
+        }
+    }
+
     expandAllNodes(expand = true) {
         const { onExpand } = this.props;
 
@@ -215,46 +261,6 @@ class CheckboxTree extends React.Component {
         return node.children.some(
             (child) => this.state.model.getNode(child.value).checkState > 0,
         );
-    }
-
-    onDragEnd = (params) => {
-        const {
-            orderable,
-            nodes,
-            onOrderChange,
-        } = this.props;
-
-        if (orderable) {
-            if (!params.destination)
-                return
-
-            let parentNodeValue = params.destination.droppableId
-            let childSrcIndex = params.source.index
-            let childDstIndex = params.destination.index
-
-            let rootNode = {
-                value: '/',
-                children: JSON.parse(JSON.stringify(nodes))
-            }
-            // find parent node
-            let traverseNodes = (root, nodeValue) => {
-                if (root.children)
-                    for (let node of root.children) {
-                        if (node.value === nodeValue)
-                            return node
-                        let result = traverseNodes(node, nodeValue)
-                        if (result !== undefined) return result
-                    }
-                return undefined
-            }
-            let parentNode = parentNodeValue == '/' ? rootNode : traverseNodes(rootNode, parentNodeValue)
-            // swap values
-            parentNode.children = reorder(parentNode.children, childSrcIndex, childDstIndex)
-            let newPropsNodes = rootNode.children;
-            if (onOrderChange) {
-                onOrderChange(newPropsNodes)
-            }
-        }
     }
 
     renderTreeNodes(nodes, parent = {}) {
@@ -335,14 +341,13 @@ class CheckboxTree extends React.Component {
                     droppableId={(parent.value ?? '/')}
                 >
                     {
-                        (provider) => {
-                            return (
-                                <ol {...provider.droppableProps} ref={provider.innerRef}>
-                                    {treeNodes}
-                                    {provider.placeholder}
-                                </ol>
-                            );
-                        }
+                        (provider) => (
+                            <ol {...provider.droppableProps} ref={provider.innerRef}>
+                                {treeNodes}
+                                {provider.placeholder}
+                            </ol>
+                        )
+
                     }
                 </Droppable>
             </DragDropContext>

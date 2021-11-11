@@ -31,8 +31,8 @@ const baseProps = {
     showNodeIcon: true,
     treeId: 'id',
     value: 'jupiter',
-    onCheck: () => {},
-    onExpand: () => {},
+    onCheck: () => { },
+    onExpand: () => { },
 };
 
 describe('<TreeNode />', () => {
@@ -470,7 +470,7 @@ describe('<TreeNode />', () => {
                 <TreeNode
                     {...baseProps}
                     value="jupiter"
-                    onClick={() => {}}
+                    onClick={() => { }}
                 />,
             );
 

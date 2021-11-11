@@ -129,7 +129,7 @@ class ExpandAllExample extends React.Component {
                     showExpandAll
                     onCheck={this.onCheck}
                     onExpand={this.onExpand}
-                    orderable={true}
+                    orderable
                     onOrderChange={this.onOrderChange}
                 />
             </div>

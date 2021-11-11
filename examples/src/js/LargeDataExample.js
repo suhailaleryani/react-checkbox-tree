@@ -20,7 +20,7 @@ for (let i = 0; i < 100; i += 1) {
     });
 }
 
-const nodes = [{
+const nodesData = [{
     value: 'node-0',
     label: 'Node 0',
     children: parents,
@@ -30,7 +30,7 @@ class LargeDataExample extends React.Component {
     state = {
         checked: [],
         expanded: [],
-        nodes: nodes,
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -65,7 +65,7 @@ class LargeDataExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
-                orderable={true}
+                orderable
                 onOrderChange={this.onOrderChange}
             />
         );
