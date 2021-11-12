@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/suhailaleryani/react-checkbox-tree"
+    "url": "https://github.com/suhailaleryani/react-checkbox-tree-reorderable"
   },
-  "homepage": "https://github.com/suhailaleryani/react-checkbox-tree#readme",
-  "bugs": "https://github.com/suhailaleryani/react-checkbox-tree/issues",
+  "homepage": "https://github.com/suhailaleryani/react-checkbox-tree-reorderable#readme",
+  "bugs": "https://github.com/suhailaleryani/react-checkbox-tree-reorderable/issues",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
   "scripts": {
