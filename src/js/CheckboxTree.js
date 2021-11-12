@@ -197,7 +197,11 @@ class CheckboxTree extends React.Component {
             nodes.forEach((node) => {
                 if (node.icon) {
                     if (!React.isValidElement(node.icon)) {
-                        node.icon = React.createElement(node.icon.type, node.icon.props, node.icon.props.children)
+                        node.icon = React.createElement( // eslint-disable-line no-param-reassign
+                            node.icon.type,
+                            node.icon.props,
+                            node.icon.props.children,
+                        );
                     }
                 }
                 if (node.children) {
