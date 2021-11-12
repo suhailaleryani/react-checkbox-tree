@@ -1,4 +1,3 @@
-import 'jsdom-global/register';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { JSDOM } from 'jsdom';
@@ -18,6 +17,7 @@ function copyProps(src, target) {
 global.window = window;
 global.document = window.document;
 global.HTMLElement = window.HTMLElement;
+global.Element = window.Element;
 global.navigator = {
     userAgent: 'node.js',
 };
