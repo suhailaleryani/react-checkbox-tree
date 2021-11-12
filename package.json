@@ -1,6 +1,6 @@
 {
   "name": "react-checkbox-tree-reorderable",
-  "version": "1.7.2",
+  "version": "1.7.2.1",
   "description": "Fork from react-checkbox-tree to add drag and drop to reorder the list",
   "author": "Suhail Al-Eryani",
   "license": "MIT",
