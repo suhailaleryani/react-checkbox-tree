@@ -176,6 +176,39 @@ class CheckboxTree extends React.Component {
         this.expandAllNodes(false);
     }
 
+    traverseNodes = (root, nodeValue) => {
+        let result;
+        if (root.children) {
+            root.children.forEach((node) => {
+                if (!result) {
+                    if (node.value === nodeValue) {
+                        result = node;
+                    } else {
+                        result = this.traverseNodes(node, nodeValue);
+                    }
+                }
+            });
+        }
+        return result;
+    }
+
+    fixCustomIcons = (nodes) => {
+        if (Array.isArray(nodes)) {
+            nodes.forEach((node) => {
+                if (node.icon) {
+                    if (!React.isValidElement(node.icon)) {
+                        node.icon = React.createElement(node.icon.type, node.icon.props, node.icon.props.children)
+                    }
+                }
+                if (node.children) {
+                    this.fixCustomIcons(node.children);
+                }
+            });
+        }
+
+        return nodes;
+    }
+
     onDragEnd = (params) => {
         const {
             orderable,
@@ -197,28 +230,12 @@ class CheckboxTree extends React.Component {
                 children: JSON.parse(JSON.stringify(nodes)),
             };
             // find parent node
-            const traverseNodes = (root, nodeValue) => {
-                let result;
-                if (root.children) {
-                    root.children.forEach((node) => {
-                        if (!result) {
-                            if (node.value === nodeValue) {
-                                result = node;
-                            } else {
-                                result = traverseNodes(node, nodeValue);
-                            }
-                        }
-                    });
-                }
-                return result;
-            };
-
-            const parentNode = parentNodeValue === '/' ? rootNode : traverseNodes(rootNode, parentNodeValue);
+            const parentNode = parentNodeValue === '/' ? rootNode : this.traverseNodes(rootNode, parentNodeValue);
             // swap values
             parentNode.children = reorder(parentNode.children, childSrcIndex, childDstIndex);
             const newPropsNodes = rootNode.children;
             if (onOrderChange) {
-                onOrderChange(newPropsNodes);
+                onOrderChange(this.fixCustomIcons(newPropsNodes));
             }
         }
     }
