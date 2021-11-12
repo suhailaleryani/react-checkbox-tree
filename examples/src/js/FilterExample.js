@@ -119,6 +119,12 @@ class FilterExample extends React.Component {
         this.setState({ filterText: e.target.value }, this.filterTree);
     }
 
+    onOrderChange = (orderedNodes) => {
+        this.setState({
+            nodesFiltered: orderedNodes,
+        });
+    }
+
     filterTree() {
         // Reset nodes back to unfiltered state
         if (!this.state.filterText) {
@@ -152,12 +158,6 @@ class FilterExample extends React.Component {
         return filtered;
     }
 
-    onOrderChange = (orderedNodes) => {
-        this.setState({
-            nodesFiltered: orderedNodes
-        });
-    }
-
     render() {
         const {
             checked,
@@ -182,7 +182,7 @@ class FilterExample extends React.Component {
                     nodes={nodesFiltered}
                     onCheck={this.onCheck}
                     onExpand={this.onExpand}
-                    orderable={true}
+                    orderable
                     onOrderChange={this.onOrderChange}
                 />
             </div>

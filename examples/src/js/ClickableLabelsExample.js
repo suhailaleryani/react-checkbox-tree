@@ -124,7 +124,9 @@ class ClickExample extends React.Component {
     }
 
     render() {
-        const { checked, expanded, clicked, nodes } = this.state;
+        const {
+            checked, expanded, clicked, nodes,
+        } = this.state;
         const notClickedText = '(none)';
 
         return (
@@ -138,7 +140,7 @@ class ClickExample extends React.Component {
                     onCheck={this.onCheck}
                     onClick={this.onClick}
                     onExpand={this.onExpand}
-                    orderable={true}
+                    orderable
                     onOrderChange={this.onOrderChange}
                 />
                 <div className="clickable-labels-info">

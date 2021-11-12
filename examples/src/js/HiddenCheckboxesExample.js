@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: 'favorite-empires',
         label: 'Favorite Empires',
@@ -98,7 +98,7 @@ class HiddenCheckboxesExample extends React.Component {
             'classical-era',
             'medieval-era',
         ],
-        nodes: nodes,
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -134,7 +134,7 @@ class HiddenCheckboxesExample extends React.Component {
                 onlyLeafCheckboxes
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
-                orderable={true}
+                orderable
                 onOrderChange={this.onOrderChange}
             />
         );

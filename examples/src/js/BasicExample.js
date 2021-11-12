@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: '/app',
         label: 'app',
@@ -82,7 +82,7 @@ const nodes = [
 
 class BasicExample extends React.Component {
     state = {
-        nodes: nodes,
+        nodes: nodesData,
         checked: [
             '/app/Http/Controllers/WelcomeController.js',
             '/app/Http/routes.js',
@@ -117,9 +117,8 @@ class BasicExample extends React.Component {
     }
 
     render() {
-        const { checked, expanded, nodes } = this.state;
-        const onOrderChange = this.onOrderChange;
-        const key = Math.random();
+        const { onOrderChange, state } = this;
+        const { checked, expanded, nodes } = state;
 
         return (
             <CheckboxTree
@@ -129,7 +128,7 @@ class BasicExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
-                orderable={true}
+                orderable
                 onOrderChange={onOrderChange}
             />
         );

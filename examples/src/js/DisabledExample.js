@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 
-const nodes = [
+const nodesData = [
     {
         value: '/app',
         label: 'app',
@@ -92,7 +92,7 @@ class DisabledExample extends React.Component {
         expanded: [
             '/app',
         ],
-        nodes: nodes,
+        nodes: nodesData,
     };
 
     constructor(props) {
@@ -128,7 +128,7 @@ class DisabledExample extends React.Component {
                 nodes={nodes}
                 onCheck={this.onCheck}
                 onExpand={this.onExpand}
-                orderable={true}
+                orderable
                 onOrderChange={this.onOrderChange}
             />
         );

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -12,6 +12,8 @@ class TreeNode extends React.PureComponent {
     static propTypes = {
         checked: PropTypes.number.isRequired,
         disabled: PropTypes.bool.isRequired,
+        draggableId: PropTypes.string.isRequired,
+        draggableIndex: PropTypes.number.isRequired,
         expandDisabled: PropTypes.bool.isRequired,
         expanded: PropTypes.bool.isRequired,
         icons: iconsShape.isRequired,
@@ -26,6 +28,7 @@ class TreeNode extends React.PureComponent {
             PropTypes.string,
             PropTypes.number,
         ]).isRequired,
+
         onCheck: PropTypes.func.isRequired,
         onExpand: PropTypes.func.isRequired,
 
@@ -33,12 +36,10 @@ class TreeNode extends React.PureComponent {
         className: PropTypes.string,
         expandOnClick: PropTypes.bool,
         icon: PropTypes.node,
+        isDragDisabled: PropTypes.bool,
         showCheckbox: PropTypes.bool,
         title: PropTypes.string,
         onClick: PropTypes.func,
-        draggableId: PropTypes.string.isRequired,
-        draggableIndex: PropTypes.number.isRequired,
-        isDragDisabled: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -327,27 +328,25 @@ class TreeNode extends React.PureComponent {
                 index={draggableIndex}
                 isDragDisabled={isDragDisabled}
             >
-                {(provider) => {
-                    return (
-                        <li
-                            className={nodeClass}
-                            {...provider.draggableProps}
-                            ref={provider.innerRef}
-                            style={{
-                                ...provider.draggableProps.style,
-                            }}
+                {(provider) => (
+                    <li
+                        className={nodeClass}
+                        {...provider.draggableProps}
+                        ref={provider.innerRef}
+                        style={{
+                            ...provider.draggableProps.style,
+                        }}
+                    >
+                        <span
+                            className="rct-text"
+                            {...provider.dragHandleProps}
                         >
-                            <span
-                                className="rct-text"
-                                {...provider.dragHandleProps}
-                            >
-                                {this.renderCollapseButton()}
-                                {this.renderLabel()}
-                            </span>
-                            {this.renderChildren()}
-                        </li>
-                    )
-                }}
+                            {this.renderCollapseButton()}
+                            {this.renderLabel()}
+                        </span>
+                        {this.renderChildren()}
+                    </li>
+                )}
             </Draggable>
         );
     }
